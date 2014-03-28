@@ -3,12 +3,18 @@
 
   "name": "FB Autopoker",
   "description": "This extension autopokes people on Facebook.",
-  "version": "1.0",
+  "version": "1.1",
 
   "content_scripts": [{
     "matches": ["*://*.facebook.com/*"],
     "js": ["jquery-1.11.0.min.js", "fb-autopoker.js"],
     "run_at": "document_end"
   }],
-  "offline_enabled": false
+
+  "permissions": [
+    "storage"
+  ],
+
+  "offline_enabled": false,
+  "options_page": "options.html"
 }
