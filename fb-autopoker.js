@@ -1,19 +1,43 @@
-window.onload = poke();
+window.onload = load();
 
-function poke() {
-  var interval = 15;
+function load() {
   chrome.storage.sync.get({
-    interval: 15
+    interval: 15,
+    random: false,
+    range: 1
   }, function(items) {
 
-    setInterval(function() {
-      console.log("Attempting a poke at " + new Date());
-      var poke_link = $('a._42ft._4jy0._4jy3._4jy1.selected[role="button"][rel="async-post"]:contains("Poke Back")');
-      if (poke_link.length) {
-        poke_link[0].click();
-        console.log("Poke successful!");
-      }
-    }, items.interval * 1000);
+    if (items.random) {
 
+      (function loop() {
+        var rand = randomIntFromInterval(items.interval - items.range, items.interval + items.range);
+
+        setTimeout(function() {
+          poke();
+          loop();
+        }, rand * 1000);
+      }());
+
+    } else {
+
+      setInterval(function() {
+        poke();
+      }, items.interval * 1000);
+
+    }
   });
+}
+
+function poke() {
+  console.log("Attempting a poke at " + new Date());
+  var poke_link = $('a._42ft._4jy0._4jy3._4jy1.selected[role="button"][rel="async-post"]:contains("Poke Back")');
+  if (poke_link.length) {
+    poke_link[0].click();
+    console.log("Poke successful!");
+  }
+}
+
+function randomIntFromInterval(min, max)
+{
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
